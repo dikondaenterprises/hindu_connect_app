@@ -1,0 +1,22 @@
+class PressableIcon extends StatefulWidget {
+  final IconData icon;
+  final VoidCallback onTap;
+  const PressableIcon(this.icon, {required this.onTap, super.key});
+  @override
+  _PressableIconState createState() => _PressableIconState();
+}
+class _PressableIconState extends State<PressableIcon> {
+  bool _pressed = false;
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) => setState(() => _pressed = true),
+      onTapUp: (_) { setState(() => _pressed = false); widget.onTap(); },
+      child: AnimatedScale(
+        scale: _pressed ? 0.8 : 1.0,
+        duration: const Duration(milliseconds: 100),
+        child: Icon(widget.icon),
+      ),
+    );
+  }
+}

@@ -1,0 +1,61 @@
+✅ Step-by-Step: Create & Test Firebase Dynamic Links
+1. ✅ Set Up in Firebase Console
+Go to Firebase Console
+
+Choose your project → Navigate to Engage > Dynamic Links
+
+Click "Get Started"
+
+Create a domain (e.g., https://hinduconnect.page.link)
+
+After it's set, click "New Dynamic Link"
+
+2. ✅ Create a Link
+Prefix: Choose your domain (e.g., https://hinduconnect.page.link)
+
+Deep Link URL:
+Example:
+
+arduino
+Copy
+Edit
+https://hinduconnect.app/viewer?file=GitaChapter1.pdf
+Link name: Optional (e.g., “Open Gita Viewer”)
+
+iOS / Android parameters:
+
+Android package: com.example.hinduconnect_app (match your app ID)
+
+Fallback link: (optional)
+
+Click Create.
+
+3. ✅ Test the Link
+Open the link in a browser on your phone
+
+If app is installed, it should:
+
+Launch the app
+
+Trigger either:
+
+FirebaseDynamicLinks.instance.getInitialLink() (cold start), or
+
+onLinkStream.listen(...) (foreground)
+
+If file, video, or temple query params are present, your main.dart should route accordingly:
+
+dart
+Copy
+Edit
+final uri = Uri.parse(link);
+final file = uri.queryParameters['file'];
+final video = uri.queryParameters['video'];
+final temple = uri.queryParameters['temple'];
+✅ Example Test Links
+Type	Link
+Viewer	https://hinduconnect.page.link/?link=https://hinduconnect.app/viewer?file=Gita.pdf&apn=com.example.hinduconnect_app
+Video	https://hinduconnect.page.link/?link=https://hinduconnect.app/connect?video=BhagavadGitaEp1&apn=com.example.hinduconnect_app
+Temple	https://hinduconnect.page.link/?link=https://hinduconnect.app/temple?temple=Kedarnath&apn=com.example.hinduconnect_app
+
+🔁 Replace your domain, parameters, and package ID as needed.

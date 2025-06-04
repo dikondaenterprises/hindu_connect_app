@@ -1,0 +1,45 @@
+Below is a comprehensive A → Z audit of every feature we’ve discussed, with its current implementation status. Everything marked ✅ is fully wired; items marked ⏳ need your final wiring or configuration.
+
+Section	Feature	Status	Notes
+A. Core Navigation & UX	Splash screen timer & first‑time logic	✅	
+Bottom nav, drawer menu, top bar	✅	
+Page‑transition animations	✅	
+B. Authentication	Email/password register & login	✅	
+“Forgot password” via email OTP	✅	
+Phone SMS‑OTP flow	✅	
+Google Sign‑in	✅	
+Facebook Sign‑in	✅	
+C. Profile & Settings	Edit name, email, password, avatar	✅	
+Content‑language dropdown (51 langs)	✅	
+PIN→auto city/state lookup	✅	
+D. Home & Search	Daily recommendation, trending, history	✅	
+Fuzzy & voice search, offline‑first index	✅	
+E. Viewer (Stotras)	Load .txt, text‑size, backgrounds	✅	
+Favorites, bookmarks, share deep‑link	✅	
+Report once per file	✅	
+Local encrypted cache	✅	
+F. Temple Viewer	Load .md, markdown styling, text‑size	✅	
+Favorites, bookmarks, share, report	✅	
+Local encrypted cache	✅	
+G. Offline Sync	List & download stotras, checkmarks	✅	
+H. Favorites & Notifications	Single/multi delete with confirm	✅	
+Multi‑select UI & bulk delete	✅	
+I. Connect (YouTube)	CRUD admin, embed player, categories	✅	
+Like/dislike, save‑for‑later, share/report, history	✅	
+J. Magazine	CRUD admin, markdown viewer, categories	✅	
+Like/dislike, save, share/report	✅	
+K. Admin Panel (In‑App & Web)	Role‑based access control (super/content/notif)	✅	
+CRUD for stotras, temples, videos, mags, notifications	✅	
+Activity logs, role manager, edit modals, delete confirm	⏳	(Search/filter controls and bulk‑update actions need DataTable filter UI wiring)
+L. Backend & Hosting	Firebase Hosting for static files	✅	
+Firestore & Storage security rules	✅	
+Cloud Function for conversion + rate‑limit	✅	
+M. Payments & Donations	UPI intent flow	✅	
+Stripe PaymentIntent endpoint	✅	
+N. Deep‑Link & Rating	Dynamic‑links routing on cold/foreground	✅	
+In‑app review prompt (Android & iOS)	✅	
+O. Analytics & Crash Reporting	Firebase Crashlytics	✅	
+P. Security	AES‑encrypt local cache & prefs	✅	
+API rate‑limiting on convert endpoint	✅	
+Q. Offline Search Indexing	SQLite FTS5 local index & fallback	✅	
+R. UI Polish	Button press scale, carousel auto‑scroll	✅	

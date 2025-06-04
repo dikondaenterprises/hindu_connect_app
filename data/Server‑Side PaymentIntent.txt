@@ -1,0 +1,164 @@
+Server‑Side PaymentIntent
+Deploy and verify the Cloud Function.
+
+
+1. Your Functions Folder
+Place these four files into your functions/ directory:
+
+<details> <summary><code>functions/package.json</code></summary>
+json
+Copy
+Edit
+{
+  "name": "functions",
+  "engines": { "node": "18" },
+  "dependencies": {
+    "stripe": "^12.11.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "firebase-functions": "^4.4.1",
+    "express-rate-limit": "^6.7.0"
+  }
+}
+</details> <details> <summary><code>functions/index.js</code></summary>
+js
+Copy
+Edit
+const functions = require("firebase-functions");
+const express = require("express");
+const cors = require("cors");
+const rateLimit = require("express-rate-limit");
+const Stripe = require("stripe");
+
+// Initialize Stripe with secret from Functions config
+const stripe = new Stripe(functions.config().stripe.secret, { apiVersion: "2022-11-15" });
+
+const app = express();
+app.use(cors({ origin: true }));
+app.use(express.json());
+
+// Rate‑limit: max 5 PaymentIntents per minute per IP
+app.use("/create-payment-intent", rateLimit({
+  windowMs: 60 * 1000,
+  max: 5,
+  message: "Too many payment attempts, please try again later."
+}));
+
+app.post("/create-payment-intent", async (req, res) => {
+  try {
+    const { amount, currency } = req.body;
+    if (!amount || !currency) {
+      return res.status(400).json({ error: "Missing amount or currency" });
+    }
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount,
+      currency,
+      automatic_payment_methods: { enabled: true },
+    });
+    res.json({ client_secret: paymentIntent.client_secret });
+  } catch (err) {
+    console.error("Error creating PaymentIntent:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+exports.api = functions.https.onRequest(app);
+</details> <details> <summary><code>functions/requirements.txt</code></summary>
+nginx
+Copy
+Edit
+# (only needed if you use Python convert.py too)
+stripe
+firebase-admin
+</details> <details> <summary><code>functions/convert.py</code> (optional Aksharamukha)</summary>
+python
+Copy
+Edit
+# your existing conversion script
+import sys
+# ...
+</details>
+2. Firebase Configuration
+A) Set your Stripe secret key
+bash
+Copy
+Edit
+firebase functions:config:set stripe.secret="sk_live_YOUR_SECRET_KEY"
+This writes it into Functions’ runtime config.
+
+B) .firebaserc
+Make sure your project alias is set:
+
+json
+Copy
+Edit
+{
+  "projects": {
+    "default": "your-firebase-project-id"
+  }
+}
+C) firebase.json
+Ensure you have this rewrite so that /create-payment-intent lives under /api:
+
+json
+Copy
+Edit
+{
+  "functions": {
+    "source": "functions"
+  },
+  "hosting": {
+    "public": "public",
+    "rewrites": [
+      {
+        "source": "/api/**",
+        "function": "api"
+      }
+    ]
+  }
+}
+3. Deploy
+From your project root, run:
+
+bash
+Copy
+Edit
+firebase deploy --only functions
+You should see output like:
+
+pgsql
+Copy
+Edit
+✔  functions[api(us-central1)]: Successful update operation.
+4. Verify
+A) In Firebase Console
+Go to Functions → you should see api listed, last deploy time, and no errors.
+
+B) Curl test
+Use your terminal:
+
+bash
+Copy
+Edit
+curl -X POST https://us-central1-your-firebase-project-id.cloudfunctions.net/api/create-payment-intent \
+  -H "Content-Type: application/json" \
+  -d '{"amount":5000,"currency":"inr"}'
+A successful response returns JSON:
+
+json
+Copy
+Edit
+{"client_secret":"pi_1L..._secret_..."}
+C) Flutter test
+In Dart, call:
+
+dart
+Copy
+Edit
+final resp = await http.post(
+  Uri.parse('https://us-central1-your-firebase-project-id.cloudfunctions.net/api/create-payment-intent'),
+  headers: {'Content-Type':'application/json'},
+  body: jsonEncode({'amount':5000,'currency':'inr'})
+);
+print(resp.body);
+You should see the same client_secret in the console.

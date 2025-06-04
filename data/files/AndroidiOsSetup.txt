@@ -1,0 +1,22 @@
+Android & iOS Setup
+Android
+In android/app/build.gradle ensure minSdkVersion ≥ 21.
+
+In android/app/src/main/AndroidManifest.xml add inside <application>:
+
+xml
+Copy
+Edit
+<meta-data android:name="com.facebook.sdk.ApplicationId"
+    android:value="@string/facebook_app_id"/>
+In android/app/src/main/res/values/strings.xml:
+
+xml
+Copy
+Edit
+<string name="facebook_app_id">YOUR_FB_APP_ID</string>
+<string name="fb_login_protocol_scheme">fbYOUR_FB_APP_ID</string>
+iOS
+In Xcode, under Info → URL Types, add a URL type with your reversed client ID for Google and fb<YOUR_FB_APP_ID> for Facebook.
+
+In ios/Runner/Info.plist add Facebook keys as per [flutter_facebook_auth docs].

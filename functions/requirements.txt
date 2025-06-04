@@ -1,0 +1,3 @@
+stripe
+firebase-admin
+aksharamukha-transliterate

@@ -1,0 +1,34 @@
+FirebaseMessaging.onMessageOpenedApp.listen((message) {
+  final link = message.data['deep_link'];
+  if (link != null) _handleDynamicLink(link);
+});
+
+
+✅ 4. Dynamic Link Routing from Notifications
+File: in your Flutter FCM handler.txt
+
+📍 Where:
+In main.dart or firebase_messaging_handler.dart
+
+✅ Insert inside main app startup:
+
+dart
+Copy
+Edit
+FirebaseMessaging.onMessageOpenedApp.listen((message) {
+  final link = message.data['deep_link'];
+  if (link != null) _handleDynamicLink(link);
+});
+✅ Make sure this function exists:
+
+dart
+Copy
+Edit
+void _handleDynamicLink(String link) {
+  final uri = Uri.parse(link);
+  if (uri.queryParameters['file'] != null) {
+    Navigator.pushNamed(context, '/viewer', arguments: uri.queryParameters['file']);
+  } else if (uri.queryParameters['temple'] != null) {
+    Navigator.pushNamed(context, '/temple', arguments: uri.queryParameters['temple']);
+  }
+}

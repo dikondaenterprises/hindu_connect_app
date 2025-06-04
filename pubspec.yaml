@@ -1,0 +1,65 @@
+name: hindu_connect_app
+description: A world's first complete devotional mobile app.
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.18.0 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Firebase packages (compatible with Dart 2.x)
+  firebase_core: ^2.24.0
+  firebase_auth: ^4.16.0
+  cloud_firestore: ^4.13.0
+  firebase_storage: ^11.6.0
+  firebase_messaging: ^14.7.6
+  firebase_crashlytics: ^3.4.9
+
+  # Third-party authentication and secure storage
+  google_sign_in: ^6.1.6
+  flutter_secure_storage: ^9.0.0
+  shared_preferences: ^2.2.2
+
+  # UI and UX
+  theme_provider: ^0.6.0
+  flutter_local_notifications: ^14.1.1
+  in_app_review: ^2.0.4
+  url_launcher: ^6.1.10
+  share_plus: ^7.2.1
+  provider: ^6.1.1
+
+  # File and media handling
+  image_picker: ^1.0.4
+  image_cropper: ^5.0.1
+  path_provider: ^2.1.2
+  path: ^1.8.3
+  sqflite: ^2.2.8+4
+  csv: ^6.0.0
+
+  # Crypto and encryption
+  encrypt: ^5.0.1
+
+  # Payments
+  flutter_stripe: ^9.5.0
+
+  # Network and utilities
+  http: 1.1.0
+  logger: ^2.0.2+1
+
+  # Markdown renderer (replacement for discontinued flutter_markdown)
+  flutter_markdown: ^0.6.19
+  firebase_dynamic_links: ^5.4.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/logo.png

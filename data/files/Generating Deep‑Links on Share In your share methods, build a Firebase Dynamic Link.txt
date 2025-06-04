@@ -1,0 +1,52 @@
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+
+Future<String> _createDeepLink({String? file, String? video, String? temple}) async {
+  final params = DynamicLinkParameters(
+    uriPrefix: 'https://yourapp.page.link',
+    link: Uri.parse(
+      'https://myapp.com/?'
+      '${file != null ? 'file=$file' : ''}'
+      '${video != null ? 'video=$video' : ''}'
+      '${temple != null ? 'temple=$temple' : ''}'
+    ),
+    androidParameters: AndroidParameters(packageName: 'com.your.app'),
+    iosParameters: IOSParameters(bundleId: 'com.your.app'),
+  );
+  final shortLink = await FirebaseDynamicLinks.instance.buildShortLink(params);
+  return shortLink.shortUrl.toString();
+}
+
+
+✅ 3. Generate Deep Links on Share
+File: Generating Deep‑Links on Share In your share methods, build a Firebase Dynamic Link.txt
+
+📍 Where:
+In viewer_page.dart, temple_viewer_page.dart, connect_page.dart, etc.
+
+✅ Add this function:
+
+dart
+Copy
+Edit
+Future<String> _createDeepLink({String? file, String? video, String? temple}) async {
+  final params = DynamicLinkParameters(
+    uriPrefix: 'https://yourapp.page.link',
+    link: Uri.parse(
+      'https://myapp.com/?'
+      '${file != null ? 'file=$file' : ''}'
+      '${video != null ? 'video=$video' : ''}'
+      '${temple != null ? 'temple=$temple' : ''}'
+    ),
+    androidParameters: AndroidParameters(packageName: 'com.your.app'),
+    iosParameters: IOSParameters(bundleId: 'com.your.app'),
+  );
+  final shortLink = await FirebaseDynamicLinks.instance.buildShortLink(params);
+  return shortLink.shortUrl.toString();
+}
+📂 Use when user taps share:
+
+dart
+Copy
+Edit
+final link = await _createDeepLink(file: 'ganesha-stotram.txt');
+Share.share(link);

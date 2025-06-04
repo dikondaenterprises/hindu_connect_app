@@ -1,0 +1,95 @@
+✅ Implementation Plan: Hybrid Storage Strategy
+🔹 Part 1: Store Top Languages in Firebase Hosting
+✔ Step-by-Step:
+Choose Top 5–8 Preferred Languages (based on usage):
+
+Example: Hindi, Telugu, Tamil, Kannada, Sanskrit, Malayalam, Marathi, Gujarati
+
+Compress & Organize Files:
+
+Group stotras logically (e.g. by category or alphabetically).
+
+Use .md, .txt, or .gz (Firebase Hosting auto-serves gzipped files if available).
+
+Example structure:
+
+swift
+Copy
+Edit
+/assets/stotras/hi/stotra1.md
+/assets/stotras/te/stotra1.md
+Upload to Firebase Hosting:
+
+Use the Firebase CLI:
+
+bash
+Copy
+Edit
+firebase init hosting
+firebase deploy
+Files will be served via CDN: https://yourapp.web.app/assets/stotras/hi/stotra1.md
+
+Access from Flutter App:
+
+Use http package to fetch:
+
+dart
+Copy
+Edit
+final url = 'https://yourapp.web.app/assets/stotras/hi/stotra1.md';
+final response = await http.get(Uri.parse(url));
+Enable Caching in App:
+
+Save downloaded files locally using path_provider.
+
+🔹 Part 2: On-the-Fly Conversion for Rare Languages via Cloud Run + Aksharamukha
+✔ Backend (Your Own Server):
+Setup Aksharamukha Python on Cloud Run / Replit / Render:
+
+Use the official Aksharamukha Python package.
+
+Wrap it in a small Flask API:
+
+python
+Copy
+Edit
+from flask import Flask, request
+from Aksharamukha.Transliterate import process
+
+app = Flask(__name__)
+
+@app.route('/convert', methods=['POST'])
+def convert():
+    data = request.json
+    text = data['text']
+    source = data['source']
+    target = data['target']
+    result = process(source, target, text)
+    return {'result': result}
+Deploy to Cloud Run (or Render/Replit/Glitch — free tiers work well).
+
+In Flutter App:
+
+If user selects a non-preferred language, call:
+
+dart
+Copy
+Edit
+final response = await http.post(
+  Uri.parse('https://your-cloud-run-url/convert'),
+  headers: {'Content-Type': 'application/json'},
+  body: jsonEncode({
+    'text': originalStotraText,
+    'source': 'Devanagari',
+    'target': 'Odia', // or whatever selected
+  }),
+);
+final convertedText = jsonDecode(response.body)['result'];
+Cache Converted Text locally so you don’t convert again.
+
+🔹 Cost and Performance Optimization Summary
+Feature	Cost	Speed	Strategy
+Top languages via Hosting	Very low	Fast (CDN)	Pre-upload, cache offline
+Other languages via Cloud Run	Minimal	Slight delay	On-demand, cache on device
+Firebase Hosting Free Tier	10 GB/month	Very fast	Use compression, GZIP enabled
+Cloud Run Free Tier	2M requests/month	Fast	Use small Flask API

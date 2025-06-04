@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "567290788831",
+    "project_id": "hindu-connect-project",
+    "storage_bucket": "hindu-connect-project.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:567290788831:android:8285f6681e8b52d510e26a",
+        "android_client_info": {
+          "package_name": "com.hinduconnect.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCD81yUcTHHrqrJk4f2qztLp5U52kQoPKI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

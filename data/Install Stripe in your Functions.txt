@@ -1,0 +1,114 @@
+1. Install Stripe in your Functions
+functions/package.json
+
+json
+Copy
+Edit
+{
+  "name": "functions",
+  "engines": { "node": "18" },
+  "dependencies": {
+    "stripe": "^12.11.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "firebase-functions": "^4.4.1",
+    "express-rate-limit": "^6.7.0"
+  }
+}
+Run in your functions/ folder:
+
+nginx
+Copy
+Edit
+npm install
+2. Securely Provide Your Stripe Secret Key
+Use Firebase Functions config (never check your secret into source):
+
+bash
+Copy
+Edit
+firebase functions:config:set stripe.secret="sk_live_YOUR_SECRET_KEY"
+This writes to .runtimeconfig.json on the server.
+
+3. Add the PaymentIntent Endpoint
+functions/index.js
+
+js
+Copy
+Edit
+const functions = require("firebase-functions");
+const express = require("express");
+const cors = require("cors");
+const rateLimit = require("express-rate-limit");
+const Stripe = require("stripe");
+
+// Initialize Stripe with secret from Functions config
+const stripe = new Stripe(functions.config().stripe.secret, { apiVersion: "2022-11-15" });
+
+const app = express();
+app.use(cors({ origin: true }));
+app.use(express.json());
+
+// Rate‑limit: max 5 PaymentIntents per minute per IP
+app.use("/create-payment-intent", rateLimit({
+  windowMs: 60 * 1000,
+  max: 5,
+  message: "Too many payment attempts, please try again later."
+}));
+
+// Create PaymentIntent endpoint
+app.post("/create-payment-intent", async (req, res) => {
+  try {
+    const { amount, currency } = req.body;
+    if (!amount || !currency) {
+      return res.status(400).json({ error: "Missing amount or currency" });
+    }
+    // Create a PaymentIntent with amount in smallest currency unit (e.g. paise)
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount,
+      currency,
+      // optional: enable automatic payment methods
+      automatic_payment_methods: { enabled: true },
+    });
+    res.json({ client_secret: paymentIntent.client_secret });
+  } catch (err) {
+    console.error("Error creating PaymentIntent:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Expose Express API as a single Cloud Function:
+exports.api = functions.https.onRequest(app);
+4. Deploy Your Functions
+bash
+Copy
+Edit
+firebase deploy --only functions
+After deploy, your endpoint will be at:
+
+bash
+Copy
+Edit
+https://us-central1-YOUR_PROJECT.cloudfunctions.net/api/create-payment-intent
+5. Flutter Integration
+In your Flutter _createPaymentIntent method, call this endpoint:
+
+dart
+Copy
+Edit
+Future<Map<String, dynamic>> _createPaymentIntent(int amount) async {
+  final url = Uri.parse('https://us-central1-YOUR_PROJECT.cloudfunctions.net/api/create-payment-intent');
+  final resp = await http.post(
+    url,
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode({'amount': amount, 'currency': 'inr'}),
+  );
+  if (resp.statusCode != 200) throw 'Failed to create PaymentIntent';
+  return jsonDecode(resp.body) as Map<String, dynamic>;
+}
+That’s it!
+Your secret key stays safe in Functions config.
+
+You have rate‑limiting to prevent abuse.
+
+Flutter can now call _createPaymentIntent and confirm the payment.

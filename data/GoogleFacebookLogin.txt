@@ -1,0 +1,20 @@
+Enable OAuth Providers in Firebase Console
+Open your project at https://console.firebase.google.com
+
+Select Authentication → Sign‑in method.
+
+Enable Google provider:
+
+Click Google, toggle Enable, set a support email, Save.
+
+Enable Facebook provider:
+
+Click Facebook, toggle Enable.
+
+You must supply your Facebook App ID & App Secret (from your Facebook Developer dashboard).
+
+Ensure the OAuth redirect URI shown in Firebase is added in your FB app’s Valid OAuth Redirect URIs.
+
+Save.
+
+(Android only) Under Project settings → Your apps → SHA certificate fingerprints, add your debug & release SHA‑1.

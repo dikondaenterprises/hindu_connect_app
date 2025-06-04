@@ -1,0 +1,3 @@
+pincodes/534222:
+  - district: "WEST GODAVARI"
+  - state: "ANDHRA PRADESH"

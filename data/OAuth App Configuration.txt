@@ -1,0 +1,115 @@
+OAuth App Configuration
+Ensure Facebook OAuth redirect URIs in Facebook Dev console.
+Add SHA‑1 for Android & URL‑types for iOS.
+
+A) Facebook OAuth Redirect URIs
+In Facebook Developer Console
+
+Go to https://developers.facebook.com ► My Apps ► Select your App.
+
+In the left sidebar choose Facebook Login ► Settings.
+
+Under Valid OAuth Redirect URIs add both:
+
+perl
+Copy
+Edit
+https://<YOUR_FIREBASE_PROJECT>.firebaseapp.com/__/auth/handler
+https://<YOUR_DYNAMIC_LINK_DOMAIN>/_/auth/handler
+The first is Firebase’s built‑in OAuth handler.
+
+The second covers dynamic‑links sign‑in if you use them.
+
+Click Save Changes.
+
+App Domains
+
+In Settings ► Basic, add your hosting domain(s) under App Domains:
+
+php-template
+Copy
+Edit
+<YOUR_FIREBASE_PROJECT>.firebaseapp.com
+yourapp.page.link
+Save.
+
+B) Android: Add SHA‑1 to Firebase & Facebook
+Generate your SHA‑1
+
+For debug key:
+
+bash
+Copy
+Edit
+keytool -list -v -alias androiddebugkey \
+  -keystore ~/.android/debug.keystore -storepass android \
+  -keypass android
+For release, use your production keystore and its passwords.
+
+Add SHA‑1 to Firebase
+
+In Firebase Console ► Project Settings ► Your Android App ► Add Fingerprint ► paste the SHA‑1.
+
+Download updated google-services.json and replace in android/app/.
+
+Add SHA‑1 to Facebook
+
+In Facebook Dev Console ► Settings ► Basic ► Android ► Key Hashes ► paste the same SHA‑1 (Base64).
+
+Save changes.
+
+C) iOS: URL‑Types & Bundle IDs
+URL Schemes for Google & Facebook
+
+In Xcode open Info.plist (Runner target).
+
+Under URL types add two entries:
+
+Identifier	URL Schemes
+com.googleusercontent.apps.YOUR_CLIENT_ID	com.googleusercontent.apps.YOUR_CLIENT_ID
+Facebook	fb<YOUR_FACEBOOK_APP_ID>
+
+To add: click “+” beside URL types, set Identifier, then expand and add URL Schemes array item.
+
+Facebook Settings in Info.plist
+Also add these keys (if not already present):
+
+xml
+Copy
+Edit
+<key>FacebookAppID</key>
+<string>YOUR_FACEBOOK_APP_ID</string>
+<key>FacebookDisplayName</key>
+<string>YOUR_FACEBOOK_APP_NAME</string>
+<key>LSApplicationQueriesSchemes</key>
+<array>
+  <string>fbapi</string>
+  <string>fb-messenger-api</string>
+  <string>fbauth2</string>
+  <string>fbshareextension</string>
+</array>
+Bundle Identifier
+
+In Xcode ► Runner ► General ► Identity ► Bundle Identifier
+
+Must match the OAuth redirect URIs and Firebase iOS app settings.
+
+D) Verify & Test
+Rebuild Android
+
+bash
+Copy
+Edit
+flutter clean
+flutter run
+Tap “Sign in with Facebook” and ensure the Facebook dialog appears and returns to your app.
+
+Rebuild iOS
+
+In Xcode select a real device or simulator, build & run.
+
+Test Facebook login flow—should open in SafariViewController and return.
+
+Check Firebase Auth
+
+In Firebase Console ► Authentication ► Users, you should see new user records with provider “facebook.com”.

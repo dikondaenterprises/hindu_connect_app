@@ -1,0 +1,12 @@
+How to deploy
+Place these two files at your project root.
+
+Run:
+
+bash
+Copy
+Edit
+firebase deploy --only firestore:rules storage:rules
+Verify in the Firebase console under “Rules” that they’ve been applied.
+
+This ensures your data and files remain secure while allowing public reading of devotional content.

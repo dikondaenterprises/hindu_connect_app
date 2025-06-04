@@ -1,0 +1,38 @@
+// inside your ViewerPage bottom bar
+AnimatedScale(
+  scale: _pressed ? 0.9 : 1.0,
+  duration: const Duration(milliseconds: 100),
+  child: IconButton(
+    icon: const Icon(Icons.text_increase),
+    onPressed: () {
+      setState(() => _pressed = true);
+      Future.delayed(const Duration(milliseconds: 100), () {
+        setState(() => _pressed = false);
+        _changeFontSize(2);
+      });
+    },
+  ),
+);
+
+
+✅ 1. Button‑Press Animation
+File: Button‑Press Animation wrap all IconButton ElevatedButton
+
+📍 Where:
+Anywhere you use IconButton or ElevatedButton, update just the icon/text child.
+
+✅ What to add:
+
+dart
+Copy
+Edit
+AnimatedScale(
+  scale: isPressed ? 0.95 : 1.0,
+  duration: const Duration(milliseconds: 100),
+  child: Icon(Icons.favorite),
+)
+📂 Example File:
+
+viewer_page.dart, inside your bottom bar button row.
+
+Wrap each icon with AnimatedScale, controlled via GestureDetector if needed.

@@ -1,0 +1,111 @@
+Devotional App — Product Requirements & Specifications
+1. Overview
+App Name: Devotional App
+Purpose: Provide a rich, temple‑like mobile experience for reading Devotional Stotras, exploring Temples, watching spiritual videos, reading articles (Magazine), and connecting with a global Hindu community.
+
+2. Target Audience
+Devotees of Hindu tradition seeking daily prayers (Stotras)
+
+Temple pilgrims wanting information and live darshan links
+
+Spiritual learners interested in articles, videos, quizzes
+
+Administrators/content managers needing in‑app & web tools
+
+3. Platforms
+Mobile App: Flutter (Android & iOS)
+
+Admin Panel (In‑App): Flutter screens under /lib/screens/admin/…
+
+Admin Panel (Web): Flutter Web under /admin_web/lib/…
+
+Backend: Firebase (Auth, Firestore, Hosting, Functions)
+
+4. Functional Features
+Module	Key Behaviors
+Authentication:	Email/password, phone SMS‑OTP, Google, Facebook; register, login, reset OTP
+Profile:	Edit name, email, mobile, avatar; choose Content‑Language (51 langs); PIN→city/state auto-fill
+Home:	Daily Stotra suggestion; trending; recent searches; voice search; carousel
+Search:	Fuzzy, spell‑tolerant, voice; offline SQLite FTS5 first; Firestore fallback
+Viewer: (Stotras)	Load .txt, text‑size controls, background switch, offline cache, share/deeplink, report once, bookmark
+Temples:	Search state‑wise, load .md, markdown styling, share/deeplink, report, diary
+Connect:	Embed YouTube videos/shorts; like/dislike; save‑later; share; report; history
+Magazine:	List articles; markdown viewer; like/dislike; save; share; report
+Offline Sync:	Pre‑download selected language Stotras in‑app; show progress & checkmarks
+Favorites:	Multi‑select; delete single/all; offline view; confirm before delete
+Notifications:	List, multi‑select delete; deep‑link navigation
+Quizzes & Puzzles:	Home‑page mini‑games for engagement
+Donation:	UPI intent; Stripe PaymentIntent via Cloud Function
+Deep Links & Rating:	Firebase Dynamic Links; in‑app review prompt after N launches
+
+5. Admin Panel Features
+Area:	In‑App & Web Controls
+Content CRUD:	Create/Edit/Delete Stotras, Temples, Videos, Magazines, Notifications
+Bulk Actions:	Multi‑select rows; bulk‑delete; bulk‑update (e.g. change language, status)
+Filtering:	Text filters in DataTable headers for each column
+Role‑Based:	Super‑Admin, Content Manager, Notification Manager, Viewer; language‑specific permissions
+Activity Log:	Audit trail of all admin actions
+Search/Filter:	Instant filtering in admin lists
+Notifications:	Schedule/send targeted push notifications by language
+UI Controls:	Edit modals, confirmation dialogs, pagination/lazy loading, dark‑mode toggle
+
+6. Technical Architecture
+bash
+Copy
+Edit
+Flutter App
+├── lib/
+│   ├── screens/       # UI pages
+│   ├── widgets/       # Reusable controls
+│   ├── services/      # API, local search, auth flows
+│   ├── config/        # routes, theme
+│   └── main.dart
+
+Firebase
+├── Authentication     # Email, Phone, Google, Facebook
+├── Firestore          # collections: stotras, temples, videos, magazines, notifications, admins, logs
+├── Hosting            # public/stotras, public/temples, dynamic links
+├── Functions          # convert API, create‑payment‑intent
+├── Crashlytics
+└── Security Rules
+
+Flutter Web Admin
+└── admin_web/lib/     # mirror of in‑app admin UI, DataTables, filters
+7. Non‑Functional Requirements
+Category			Requirement
+Performance:		<200 ms response for local search; <1 s for network fetch
+Offline:			Must view favorites, offline sync, offline search
+Security:			AES encrypt local cache & prefs; rate‑limit conversion API; Firestore rules:	    Scalability	Support 144 000 Stotra files; 5 000 temples; dynamic conversion for 45 langs
+UX/UI:	Temple‑inspired colors, animations, fonts; lightweight for smooth 60 fps
+Accessibility:	Text‑size controls; high‑contrast backgrounds
+Reliability:	Crashlytics monitoring; auto‑retry for transient network failures
+
+8. Setup & Deployment
+Firebase Project
+
+Enable Auth providers, Firestore, Hosting, Functions, Crashlytics.
+
+Deploy firebase.json, .firebaserc, security rules.
+
+Functions
+
+Install deps, set Stripe secret, deploy conversion & payment endpoints.
+
+Flutter
+
+flutter pub get → configure firebase_options.dart → run on Android/iOS.
+
+Admin Web
+
+flutter build web in admin_web/ → deploy under Firebase Hosting rewrite.
+
+9. Next Milestones
+Final end‑to‑end testing on device matrix
+
+App Store & Play Store submission
+
+Monitor analytics & user feedback
+
+Plan Phase 2: Community Forum, Premium Subscription
+
+This document captures every requirement, behavior, and technical detail from our A→Z spec.

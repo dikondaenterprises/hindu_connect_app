@@ -1,0 +1,6 @@
+Scaffold(
+  drawer: SlideTransitionDrawer(
+    child: DrawerMenu(),
+  ),
+  // …
+)

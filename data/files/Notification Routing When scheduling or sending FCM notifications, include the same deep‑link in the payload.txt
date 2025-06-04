@@ -1,0 +1,4 @@
+{
+  "notification": {"title": "...", "body": "..."},
+  "data": {"deep_link": "https://yourapp.page.link/?file=ganesha-stotram.txt"}
+}

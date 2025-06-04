@@ -1,0 +1,21 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDH9altkvE0rwhNt4FzX3mV_eyac15JWlk",
+  authDomain: "hindu-connect-project.firebaseapp.com",
+  projectId: "hindu-connect-project",
+  storageBucket: "hindu-connect-project.firebasestorage.app",
+  messagingSenderId: "567290788831",
+  appId: "1:567290788831:web:e3daed64f9570fb610e26a",
+  measurementId: "G-7X6BZDH5XG"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);

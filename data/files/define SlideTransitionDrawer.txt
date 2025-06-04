@@ -1,0 +1,93 @@
+class SlideTransitionDrawer extends StatefulWidget {
+  final Widget child;
+  const SlideTransitionDrawer({required this.child, super.key});
+  @override
+  _SlideTransitionDrawerState createState() => _SlideTransitionDrawerState();
+}
+class _SlideTransitionDrawerState extends State<SlideTransitionDrawer> with SingleTickerProviderStateMixin {
+  late AnimationController _ctrl;
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
+    _ctrl.forward();
+  }
+  @override
+  void dispose() { _ctrl.dispose(); super.dispose(); }
+  @override
+  Widget build(BuildContext context) {
+    return SlideTransition(
+      position: Tween<Offset>(begin: const Offset(-1,0), end: Offset.zero).animate(_ctrl),
+      child: widget.child,
+    );
+  }
+}
+class SlideTransitionDrawer extends StatefulWidget {
+  final Widget child;
+  const SlideTransitionDrawer({required this.child, super.key});
+  @override
+  _SlideTransitionDrawerState createState() => _SlideTransitionDrawerState();
+}
+class _SlideTransitionDrawerState extends State<SlideTransitionDrawer> with SingleTickerProviderStateMixin {
+  late AnimationController _ctrl;
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
+    _ctrl.forward();
+  }
+  @override
+  void dispose() { _ctrl.dispose(); super.dispose(); }
+  @override
+  Widget build(BuildContext context) {
+    return SlideTransition(
+      position: Tween<Offset>(begin: const Offset(-1,0), end: Offset.zero).animate(_ctrl),
+      child: widget.child,
+    );
+  }
+}
+
+
+✅ 2. SlideTransitionDrawer
+File: define SlideTransitionDrawer.txt
+
+📍 Where:
+In your drawer_menu.dart file or any drawer invocation. Create the drawer class once:
+
+✅ Insert this entire class:
+
+dart
+Copy
+Edit
+class SlideTransitionDrawer extends StatefulWidget {
+  final Widget child;
+  const SlideTransitionDrawer({required this.child, super.key});
+  @override
+  _SlideTransitionDrawerState createState() => _SlideTransitionDrawerState();
+}
+class _SlideTransitionDrawerState extends State<SlideTransitionDrawer> with SingleTickerProviderStateMixin {
+  late AnimationController _ctrl;
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
+    _ctrl.forward();
+  }
+  @override
+  void dispose() { _ctrl.dispose(); super.dispose(); }
+  @override
+  Widget build(BuildContext context) {
+    return SlideTransition(
+      position: Tween<Offset>(begin: const Offset(-1,0), end: Offset.zero).animate(_ctrl),
+      child: widget.child,
+    );
+  }
+}
+📂 Use it like:
+
+dart
+Copy
+Edit
+Drawer(
+  child: SlideTransitionDrawer(child: ListView(...)),
+)
